@@ -1,0 +1,10 @@
+{% extends "_layout.html" %}
+{% block title %}{{ page_title }} · EEGII FIT{% endblock %}
+{% block main %}
+  <p class="eyebrow"><span class="slash">/</span> {{ page_title }}</p>
+  <div class="soon">
+    <img class="soon-mark" src="{{ url_for('static', filename='logo-mark.svg') }}" alt="">
+    <h1><em>Удахгүй</em></h1>
+    <p class="muted">{{ page_title }} хэсэг одоогоор бэлтгэгдэж байна.</p>
+  </div>
+{% endblock %}

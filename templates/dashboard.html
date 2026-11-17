@@ -1,0 +1,47 @@
+{% extends "_layout.html" %}
+{% set active = "content" %}
+{% block title %}Контент · EEGII FIT{% endblock %}
+{% set status_labels = {"draft": "Хүлээгдэж буй", "approved": "Батлагдсан", "rejected": "Татгалзсан", "published": "Нийтэлсэн", "archived": "Архивласан"} %}
+{% set pending_count = drafts|selectattr("status", "equalto", "draft")|list|length %}
+{% block main %}
+  <p class="eyebrow"><span class="slash">/</span> Контент</p>
+  <div class="heading-row">
+    <div>
+      <h1>Ноорог <em>постууд</em></h1>
+      <p class="muted">Хүлээгдэж буй ноорогуудыг батлах эсвэл татгалзана уу.</p>
+    </div>
+    <span class="count"><strong>{{ pending_count }}</strong> хүлээгдэж буй</span>
+  </div>
+
+  {% if drafts %}
+    <section class="draft-list" aria-label="Ноорог постын жагсаалт">
+      {% for draft in drafts %}
+        <article class="draft-card draft-{{ draft.status }}">
+          <div class="draft-heading">
+            <h2>{{ draft.title }}</h2>
+            <span class="status status-{{ draft.status }}">{{ status_labels.get(draft.status, draft.status) }}</span>
+          </div>
+          <p>{{ draft.content }}</p>
+          <div class="draft-foot">
+            {% if draft.created_at %}
+              <time datetime="{{ draft.created_at }}">Үүсгэсэн: {{ draft.created_at[:10]|replace("-", ".") }}</time>
+            {% endif %}
+            {% if draft.status == "draft" %}
+              <form class="draft-actions" method="post" action="{{ url_for('change_draft_status', draft_id=draft.id) }}">
+                <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+                <button class="btn btn-reject" type="submit" name="action" value="reject">Татгалзах</button>
+                <button class="btn btn-approve" type="submit" name="action" value="approve">Батлах</button>
+              </form>
+            {% endif %}
+          </div>
+        </article>
+      {% endfor %}
+    </section>
+  {% else %}
+    <div class="empty-state">
+      <img class="empty-icon" src="{{ url_for('static', filename='logo-mark.svg') }}" alt="">
+      <h2>Одоогоор ноорог алга</h2>
+      <p class="muted">Шинэ ноорог пост нэмэгдэхэд энд харагдана.</p>
+    </div>
+  {% endif %}
+{% endblock %}

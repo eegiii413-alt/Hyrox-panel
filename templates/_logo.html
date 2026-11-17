@@ -1,0 +1,9 @@
+{% macro logo(size="md") %}
+  <span class="logo logo-{{ size }}" role="img" aria-label="EEGII FIT HYROX">
+    <img class="logo-mark" src="{{ url_for('static', filename='logo-mark.svg') }}" alt="">
+    <span class="logo-text">
+      <span class="logo-name">EEGII FIT</span>
+      <span class="logo-sub">HYROX</span>
+    </span>
+  </span>
+{% endmacro %}

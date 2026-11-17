@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% from "_logo.html" import logo with context %}
+{% block title %}Нэвтрэх · EEGII FIT{% endblock %}
+{% block content %}
+  <section class="login-card">
+    <div class="login-logo">{{ logo("lg") }}</div>
+    <p class="eyebrow"><span class="slash">/</span> Удирдлагын самбар</p>
+    <h1>Тавтай <em>морил</em></h1>
+    <p class="muted">Самбартаа нэвтрэхийн тулд и-мэйл, нууц үгээ оруулна уу.</p>
+    <form method="post" action="{{ url_for('login') }}">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <label for="email">И-мэйл</label>
+      <input id="email" name="email" type="email" autocomplete="username"
+             placeholder="name@example.com" required>
+      <label for="password">Нууц үг</label>
+      <input id="password" name="password" type="password"
+             autocomplete="current-password" placeholder="Нууц үгээ оруулна уу" required>
+      <button type="submit">Нэвтрэх <span aria-hidden="true">→</span></button>
+    </form>
+    <p class="footnote">Тууштай хөдөл, тэгвэл <strong>чи турна.</strong></p>
+  </section>
+{% endblock %}

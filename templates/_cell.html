@@ -1,0 +1,13 @@
+{% macro cell(field, value) -%}
+  {%- if value is none or value == "" -%}
+    <span class="soft">—</span>
+  {%- elif field.type == "date" -%}
+    {{ value|string|replace("-", ".") }}
+  {%- elif field.name == "price" -%}
+    {{ "{:,}".format(value|int) }}₮
+  {%- elif field.name == "days" -%}
+    {{ value }} хоног
+  {%- else -%}
+    {{ value }}
+  {%- endif -%}
+{%- endmacro %}

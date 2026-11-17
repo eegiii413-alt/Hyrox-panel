@@ -1,0 +1,61 @@
+{% extends "_layout.html" %}
+{% from "_cell.html" import cell %}
+{% block title %}{{ entity.title }} · EEGII FIT{% endblock %}
+{% block main %}
+  <p class="eyebrow"><span class="slash">/</span> {{ entity.title }}</p>
+  <div class="heading-row">
+    <div>
+      <h1>{{ entity.list_heading }} <em>жагсаалт</em></h1>
+      <p class="muted">{{ entity.subtitle }}</p>
+    </div>
+    <a class="btn btn-approve btn-link" href="{{ url_for(key ~ '_new') }}">+ {{ entity.add_label }}</a>
+  </div>
+
+  <form class="search" method="get" action="{{ url_for(key ~ '_list') }}" role="search">
+    <input type="search" name="q" value="{{ q }}" placeholder="Хайх үгээ бичнэ үү…" aria-label="Хайх">
+    <button class="btn btn-reject" type="submit">Хайх</button>
+    {% if q %}<a class="search-clear" href="{{ url_for(key ~ '_list') }}">Цэвэрлэх</a>{% endif %}
+  </form>
+  {% if q %}
+    <p class="muted search-note">«{{ q }}» гэж хайхад {{ rows|length }} илэрц олдлоо (нийт {{ total }}).</p>
+  {% endif %}
+
+  {% if rows %}
+    <div class="table-wrap">
+      <table class="data-table entity-table">
+        <thead>
+          <tr>
+            <th scope="col">№</th>
+            {% for field in entity.fields %}<th scope="col">{{ field.label }}</th>{% endfor %}
+            <th scope="col" class="actions-col"><span class="visually-hidden">Үйлдэл</span></th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for row in rows %}
+            <tr>
+              <td class="num">{{ loop.index }}</td>
+              {% for field in entity.fields %}
+                <td class="{% if loop.first %}strong{% elif field.type in ('date', 'number') %}nowrap{% endif %}">{{ cell(field, row[field.name]) }}</td>
+              {% endfor %}
+              <td class="row-actions">
+                <a class="icon-btn" href="{{ url_for(key ~ '_edit', row_id=row.id) }}">Засах</a>
+                <a class="icon-btn danger" href="{{ url_for(key ~ '_delete', row_id=row.id) }}">Устгах</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <img class="empty-icon" src="{{ url_for('static', filename='logo-mark.svg') }}" alt="">
+      {% if q %}
+        <h2>Илэрц олдсонгүй</h2>
+        <p class="muted">Өөр үгээр хайж үзнэ үү.</p>
+      {% else %}
+        <h2>Одоогоор {{ entity.noun }} алга</h2>
+        <p class="muted">«{{ entity.add_label }}» товчийг дарж эхний бичлэгээ нэмээрэй.</p>
+      {% endif %}
+    </div>
+  {% endif %}
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends "_layout.html" %}
+{% from "_cell.html" import cell %}
+{% block title %}Устгах уу? · EEGII FIT{% endblock %}
+{% block main %}
+  <p class="eyebrow"><span class="slash">/</span> <a class="crumb" href="{{ url_for(key ~ '_list') }}">{{ entity.title }}</a> · Устгах</p>
+  <section class="confirm-card" role="alertdialog" aria-labelledby="confirm-title">
+    <h1 id="confirm-title">Устгах <em>уу?</em></h1>
+    <p class="muted">Та «<strong>{{ row[entity.display_field] }}</strong>»-г устгах гэж байна. Устгасныг буцааж сэргээх боломжгүй.</p>
+    <dl class="confirm-details">
+      {% for field in entity.fields %}
+        <div><dt>{{ field.label }}</dt><dd>{{ cell(field, row[field.name]) }}</dd></div>
+      {% endfor %}
+    </dl>
+    <form class="form-actions" method="post">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+      <a class="btn btn-reject btn-link" href="{{ url_for(key ~ '_list') }}">Үгүй, буцах</a>
+      <button class="btn btn-danger" type="submit">Тийм, устгах</button>
+    </form>
+  </section>
+{% endblock %}

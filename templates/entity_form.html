@@ -1,0 +1,25 @@
+{% extends "_layout.html" %}
+{% block title %}{{ entity.title }} · EEGII FIT{% endblock %}
+{% block main %}
+  <p class="eyebrow"><span class="slash">/</span> <a class="crumb" href="{{ url_for(key ~ '_list') }}">{{ entity.title }}</a> · {{ "Засах" if row_id else "Шинэ" }}</p>
+  <h1>{% if row_id %}{{ entity.title }} <em>засах</em>{% else %}{{ entity.title }} <em>нэмэх</em>{% endif %}</h1>
+
+  <form class="entity-form" method="post">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}">
+    <div class="form-grid">
+      {% for field in entity.fields %}
+        <div class="form-field">
+          <label for="f-{{ field.name }}">{{ field.label }}{% if field.required %} <span class="req">*</span>{% endif %}</label>
+          <input id="f-{{ field.name }}" name="{{ field.name }}" type="{{ field.type }}"
+                 value="{{ row.get(field.name) if row.get(field.name) is not none else '' }}"
+                 {% if field.required %}required{% endif %}
+                 {% if field.type == "number" %}min="{{ field.min }}" step="1" inputmode="numeric"{% endif %}>
+        </div>
+      {% endfor %}
+    </div>
+    <div class="form-actions">
+      <a class="btn btn-reject btn-link" href="{{ url_for(key ~ '_list') }}">Болих</a>
+      <button class="btn btn-approve" type="submit">{{ "Хадгалах" if row_id else "Нэмэх" }}</button>
+    </div>
+  </form>
+{% endblock %}

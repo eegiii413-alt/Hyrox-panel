@@ -1,0 +1,49 @@
+{% extends "_layout.html" %}
+{% set active = "bookings" %}
+{% block title %}Захиалга · EEGII FIT{% endblock %}
+{% set status_labels = {"confirmed": "Баталгаажсан", "pending": "Хүлээгдэж буй", "cancelled": "Цуцлагдсан"} %}
+{% block main %}
+  <p class="eyebrow"><span class="slash">/</span> Захиалга</p>
+  <div class="heading-row">
+    <div>
+      <h1>Бүх <em>захиалга</em></h1>
+      <p class="muted">Бэлтгэлд бүртгүүлсэн хүмүүсийн жагсаалт.</p>
+    </div>
+    <span class="count"><strong>{{ bookings|length }}</strong> захиалга</span>
+  </div>
+
+  {% if bookings %}
+    <div class="table-wrap">
+      <table class="data-table">
+        <thead>
+          <tr>
+            <th scope="col">№</th>
+            <th scope="col">Нэр</th>
+            <th scope="col">И-мэйл</th>
+            <th scope="col">Огноо</th>
+            <th scope="col">Бэлтгэл</th>
+            <th scope="col">Төлөв</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for b in bookings %}
+            <tr>
+              <td class="num">{{ loop.index }}</td>
+              <td class="strong">{{ b.customer_name }}</td>
+              <td class="soft">{{ b.email }}</td>
+              <td class="nowrap">{{ (b.booking_date or "")|replace("-", ".") }}</td>
+              <td>{{ b.session_name }}</td>
+              <td><span class="pill pill-{{ b.status }}">{{ status_labels.get(b.status, b.status) }}</span></td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% else %}
+    <div class="empty-state">
+      <img class="empty-icon" src="{{ url_for('static', filename='logo-mark.svg') }}" alt="">
+      <h2>Одоогоор захиалга алга</h2>
+      <p class="muted">Шинэ захиалга ирэхэд энд харагдана.</p>
+    </div>
+  {% endif %}
+{% endblock %}
